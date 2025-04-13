@@ -1,32 +1,45 @@
-// Armazenar produto no carrinho
-let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+// Filtro de busca de produtos
+document.getElementById('search').addEventListener('input', function () {
+    const query = this.value.toLowerCase();
+    const products = document.querySelectorAll('.product-item');
 
-function adicionarAoCarrinho(produto) {
-    carrinho.push(produto);
-    localStorage.setItem("carrinho", JSON.stringify(carrinho));
-    atualizarCarrinho();
-}
-
-// Atualiza o número de itens no carrinho
-function atualizarCarrinho() {
-    const carrinhoCount = document.getElementById('carrinho-count');
-    carrinhoCount.textContent = carrinho.length;
-}
-
-// Filtro de Preço
-function filtrarPorPreco() {
-    const precoMax = parseFloat(document.getElementById("preco-max").value);
-    const produtos = document.querySelectorAll(".produto");
-    
-    produtos.forEach(produto => {
-        const preco = parseFloat(produto.querySelector(".preco").textContent.replace("R$", "").trim());
-        if (preco <= precoMax) {
-            produto.style.display = "block";
+    products.forEach(function (product) {
+        const name = product.querySelector('h3').textContent.toLowerCase();
+        if (name.includes(query)) {
+            product.style.display = 'block';
         } else {
-            produto.style.display = "none";
+            product.style.display = 'none';
         }
     });
+});
+
+// Função para adicionar produtos ao carrinho
+const cart = [];
+
+function addToCart(productName, productPrice) {
+    cart.push({ name: productName, price: productPrice });
+    alert(`Produto adicionado ao carrinho: ${productName}`);
 }
 
-// Adicionando eventos de compra
-const btnComprar = document.query
+// Função para mostrar carrinho (apenas para demonstração)
+function showCart() {
+    if (cart.length > 0) {
+        let cartContent = 'Carrinho de Compras:\n';
+        cart.forEach((item, index) => {
+            cartContent += `${index + 1}. ${item.name} - R$${item.price}\n`;
+        });
+        alert(cartContent);
+    } else {
+        alert('Seu carrinho está vazio!');
+    }
+}
+
+// Adicionando o evento de "adicionar ao carrinho" nos botões
+const buttons = document.querySelectorAll('.product-item button');
+buttons.forEach(function (button, index) {
+    button.addEventListener('click', function () {
+        const productName = button.parentElement.querySelector('h3').textContent;
+        const productPrice = button.parentElement.querySelector('p').textContent.replace('R$', '').trim();
+        addToCart(productName, productPrice);
+    });
+});
