@@ -106,9 +106,10 @@ header nav ul li a {
 }
 
 .product-list {
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 colunas */
     gap: 20px;
+    justify-items: center;
 }
 
 .product-item {
